@@ -11,6 +11,7 @@ const FACTIONS = {
     color: 0x3b6ea5,
     hatColor: 0x25384d,
     workMult: 1.25,
+    speedMult: 1.0,
     coldResist: 0.95,
     crimeRate: 0.04,
     aggr: 0.04,
@@ -24,6 +25,7 @@ const FACTIONS = {
     color: 0x6e6252,
     hatColor: 0x453d33,
     workMult: 1.0,
+    speedMult: 1.05,
     coldResist: 1.05,
     crimeRate: 0.12,
     aggr: 0.1,
@@ -37,6 +39,7 @@ const FACTIONS = {
     color: 0x262629,
     hatColor: 0x851e1e,
     workMult: 0.5,
+    speedMult: 0.95,
     coldResist: 1.1,
     crimeRate: 0.5,
     aggr: 0.75,
@@ -50,6 +53,7 @@ const FACTIONS = {
     color: 0x3b593f,
     hatColor: 0x243827,
     workMult: 1.15,
+    speedMult: 1.05,
     coldResist: 1.0,
     crimeRate: 0.16,
     aggr: 0.45,
@@ -2570,37 +2574,45 @@ function runQuarryWork(p, dt, speedMult, walkSpeed) {
 }
 
 function recordPrisonerProduction(p, amount) {
-  p.unitsProducedToday += amount;
-  const targetQuota = state.quotas[p.job] || 15;
+  p.unitsProducedToday = (p.unitsProducedToday || 0) + amount;
+  const targetQuota = Math.max(1, state.quotas[p.job] || 15);
   p.quotaPct = Math.round((p.unitsProducedToday / targetQuota) * 100);
+  if (state.selectedEntity === p) renderInspector();
+  if (state.activePanel === 'nutrition' || state.activePanel === 'prisoners') {
+    renderActivePanel();
+  }
 }
 
 // Oblicza dzienny urobek (w jednostkach pracy na dzień) dla konkretnego więźnia
 function estimatePrisonerDailyOutput(p, jobIdOverride = null) {
-  const jobId = jobIdOverride || p.job;
+  if (!p) return 10;
+  const jobId = jobIdOverride || p.job || 'WOOD';
   const workHours = Math.max(1, state.schedule.filter(s => s === 'WORK').length);
   // 1 godzina w grze = 60s w realu; po odliczeniu dojścia z apelu/posiłku zostaje ok. 52s efektywnej pracy na każdą godzinę WORK
   const activeWorkSec = workHours * 52;
 
   const faction = FACTIONS[p.faction] || FACTIONS.POLITICAL;
-  const talent = p.workTalent || 1.0;
+  const factionWorkMult = Number.isFinite(faction.workMult) ? faction.workMult : 1.0;
+  const factionSpeedMult = Number.isFinite(faction.speedMult) ? faction.speedMult : 1.0;
+  const talent = Number.isFinite(p.workTalent) && p.workTalent > 0 ? p.workTalent : 1.0;
   const nutBonus = p.nutrition >= 70 ? 1.15 : (p.nutrition < 30 ? 0.65 : 1.0);
   const energyMult = (p.energy !== undefined && p.energy <= 0) ? 0.25 : 1.0;
   const walkHungerPenalty = p.nutrition < 30 ? 0.5 : 1.0;
-  const speechMult = (state.speechBuff && state.speechBuff.workMult) ? state.speechBuff.workMult : 1.0;
+  const speechMult = (state.speechBuff && Number.isFinite(state.speechBuff.workMult)) ? state.speechBuff.workMult : 1.0;
   // Urkowie często uchylają się od pracy, gdy nie stoi nad nimi strażnik
   const urkaSlackMult = (p.faction === 'URKA' && p.obedience < 75) ? 0.55 : 1.0;
 
-  const effWorkSpeed = Math.max(0.1, faction.workMult * talent * speechMult * nutBonus * energyMult);
-  const effWalkSpeed = Math.max(1.8, 5.4 * faction.speedMult * walkHungerPenalty);
+  const effWorkSpeed = Math.max(0.1, factionWorkMult * talent * speechMult * nutBonus * energyMult);
+  const effWalkSpeed = Math.max(1.8, 5.8 * factionSpeedMult * walkHungerPenalty);
 
   let cycleSec = 30;
   if (jobId === 'WOOD') {
-    const dropoff = findNearestSawmillDropoff(ZONES.FOREST.x, ZONES.FOREST.z);
-    // Droga z lasu przez Wachtę Zachodnią do punktu zrzutu (Tartak lub Skład Polowy) i z powrotem
-    const oneWayDist = Math.hypot(ZONES.FOREST.x - ZONES.CAMP_GATE_W.x, ZONES.FOREST.z - ZONES.CAMP_GATE_W.z) +
-                       Math.hypot(dropoff.x - ZONES.CAMP_GATE_W.x, dropoff.z - ZONES.CAMP_GATE_W.z);
-    const walkSec = (oneWayDist * 2.05) / effWalkSpeed;
+    const dropoff = findNearestSawmillDropoff(ZONES.FOREST.x, ZONES.FOREST.z) || ZONES.SAWMILL;
+    const gateE = ZONES.CAMP_GATE_E || { x: 30, z: 0 };
+    // Droga z lasu przez Wachtę Wschodnią do punktu zrzutu (Tartak lub Skład Polowy) i z powrotem
+    const oneWayDist = Math.hypot(ZONES.FOREST.x - gateE.x, ZONES.FOREST.z - gateE.z) +
+                       Math.hypot(dropoff.x - gateE.x, dropoff.z - gateE.z);
+    const walkSec = (oneWayDist * 2.0) / effWalkSpeed;
     const chopSec = 3.2 / effWorkSpeed;
     cycleSec = walkSec + chopSec;
   } else if (jobId === 'TRAIN') {
@@ -2611,27 +2623,36 @@ function estimatePrisonerDailyOutput(p, jobIdOverride = null) {
     cycleSec = walkSec + loadSec + trainWaitOverhead;
   } else if (jobId === 'QUARRY') {
     const quarryLvl = ZONES.QUARRY.level || 1;
-    const oneWayDist = Math.hypot(ZONES.QUARRY.x - ZONES.CAMP_GATE_E.x, ZONES.QUARRY.z - ZONES.CAMP_GATE_E.z) +
-                       Math.hypot(ZONES.DEPOT.x - ZONES.CAMP_GATE_E.x, ZONES.DEPOT.z - ZONES.CAMP_GATE_E.z);
-    const walkSec = (oneWayDist * 2.05) / effWalkSpeed;
+    const gateW = ZONES.CAMP_GATE_W || { x: -38, z: 12 };
+    const oneWayDist = Math.hypot(ZONES.QUARRY.x - gateW.x, ZONES.QUARRY.z - gateW.z) +
+                       Math.hypot(ZONES.DEPOT.x - gateW.x, ZONES.DEPOT.z - gateW.z);
+    const walkSec = (oneWayDist * 2.0) / effWalkSpeed;
     const mineSec = 3.2 / (effWorkSpeed * (1 + (quarryLvl - 1) * 0.15));
     cycleSec = walkSec + mineSec;
   } else if (jobId === 'KITCHEN') {
     cycleSec = (12.5 / effWorkSpeed) + 5.5;
   }
 
-  const estimated = Math.max(1, Math.round((activeWorkSec / Math.max(4, cycleSec)) * urkaSlackMult));
-  if (p.lastDayUnits && p.lastDayUnits > 0 && (!jobIdOverride || jobIdOverride === p.job)) {
-    return Math.round(estimated * 0.5 + p.lastDayUnits * 0.5);
+  const rawEst = (activeWorkSec / Math.max(4, cycleSec)) * urkaSlackMult;
+  let estimated = Number.isFinite(rawEst) ? Math.max(1, Math.round(rawEst)) : 10;
+
+  if (!jobIdOverride || jobIdOverride === p.job) {
+    const todayDone = Number.isFinite(p.unitsProducedToday) ? p.unitsProducedToday : 0;
+    if (p.lastDayUnits && Number.isFinite(p.lastDayUnits) && p.lastDayUnits > 0) {
+      estimated = Math.round(estimated * 0.5 + p.lastDayUnits * 0.5);
+    }
+    if (todayDone > estimated) {
+      estimated = todayDone;
+    }
   }
-  return estimated;
+  return Math.max(1, estimated);
 }
 
 // Zwraca statystyki wydobycia/pracy dla danej brygady: średnia, najlepszy więzień, najgorszy więzień oraz podział na kotły
 function getJobProductionStats(jobId) {
   const assigned = state.prisoners.filter(p => p.job === jobId);
   const pool = assigned.length > 0 ? assigned : state.prisoners;
-  const quota = state.quotas[jobId] || 15;
+  const quota = Math.max(1, state.quotas[jobId] || 15);
 
   if (pool.length === 0) {
     return {
@@ -2655,24 +2676,26 @@ function getJobProductionStats(jobId) {
 
   let sumDaily = 0;
   let sumToday = 0;
-  let bestP = null;
-  let bestVal = -1;
-  let worstP = null;
-  let worstVal = Infinity;
+  let bestP = pool[0];
+  let bestVal = estimatePrisonerDailyOutput(pool[0], jobId);
+  let worstP = pool[0];
+  let worstVal = bestVal;
   let tier125Count = 0;
   let tier100Count = 0;
   let tier50Count = 0;
 
   pool.forEach(p => {
-    const val = estimatePrisonerDailyOutput(p, jobId);
+    const rawVal = estimatePrisonerDailyOutput(p, jobId);
+    const val = Number.isFinite(rawVal) && rawVal > 0 ? rawVal : 1;
+    const todayVal = (p.job === jobId && Number.isFinite(p.unitsProducedToday)) ? p.unitsProducedToday : 0;
     sumDaily += val;
-    sumToday += (p.job === jobId ? (p.unitsProducedToday || 0) : 0);
+    sumToday += todayVal;
 
-    if (val > bestVal) {
+    if (val > bestVal || (val === bestVal && todayVal > (bestP.unitsProducedToday || 0))) {
       bestVal = val;
       bestP = p;
     }
-    if (val < worstVal) {
+    if (val < worstVal || (val === worstVal && todayVal < (worstP.unitsProducedToday || 0))) {
       worstVal = val;
       worstP = p;
     }
@@ -2689,14 +2712,14 @@ function getJobProductionStats(jobId) {
   return {
     assignedCount: assigned.length,
     usingFallbackPool: assigned.length === 0,
-    avgDaily,
-    bestDaily: bestVal,
+    avgDaily: Number.isFinite(avgDaily) ? avgDaily : 0,
+    bestDaily: Number.isFinite(bestVal) ? bestVal : 0,
     bestName: bestP ? bestP.name : '-',
     bestToday: bestP && bestP.job === jobId ? (bestP.unitsProducedToday || 0) : 0,
-    worstDaily: worstVal,
+    worstDaily: Number.isFinite(worstVal) ? worstVal : 0,
     worstName: worstP ? worstP.name : '-',
     worstToday: worstP && worstP.job === jobId ? (worstP.unitsProducedToday || 0) : 0,
-    avgToday,
+    avgToday: Number.isFinite(avgToday) ? avgToday : 0,
     tier125Count,
     tier100Count,
     tier50Count,
@@ -5727,9 +5750,10 @@ function loadGameFromCookies(silent = false) {
       p.starvationHours = sp.sh || 0;
       if (sp.wt) p.workTalent = sp.wt;
       if (sp.wl) p.workTraitLabel = sp.wl;
-      p.unitsProducedToday = sp.up || 0;
-      p.quotaPct = sp.qp !== undefined ? sp.qp : 100;
-      p.lastDayQuotaPct = sp.lq !== undefined ? sp.lq : 100;
+      p.unitsProducedToday = Number.isFinite(sp.up) ? sp.up : 0;
+      const defaultEstPct = Math.round((estimatePrisonerDailyOutput(p, p.job) / Math.max(1, state.quotas[p.job] || 15)) * 100);
+      p.quotaPct = Number.isFinite(sp.qp) ? sp.qp : defaultEstPct;
+      p.lastDayQuotaPct = Number.isFinite(sp.lq) ? sp.lq : defaultEstPct;
       p.obedience = sp.ob !== undefined ? sp.ob : 80;
       p.inHospital = Boolean(sp.ih);
       p.hospitalHoursLeft = sp.hh || 0;
@@ -5794,8 +5818,10 @@ function selectScheduleBrush(brushId) {
 
 function paintScheduleHour(hour) {
   state.schedule[hour] = state.selectedBrush;
+  Object.keys(JOBS).forEach(jId => recalculateJobQuotaPercentages(jId));
   updateScheduleStripUI();
   renderActivePanel();
+  updateHUD();
 }
 
 function updateMealConfig(tierKey, field, val) {
@@ -5860,10 +5886,14 @@ function changePrisonerJob(id, newJob) {
     p.job = newJob;
     p.carrying = false;
     p.mesh.carriedBox.visible = false;
-    p.quotaPct = Math.round((p.unitsProducedToday / state.quotas[p.job]) * 100);
+    const targetQ = Math.max(1, state.quotas[p.job] || 15);
+    p.lastDayQuotaPct = Math.round((estimatePrisonerDailyOutput(p, p.job) / targetQ) * 100);
+    p.quotaPct = p.unitsProducedToday > 0
+      ? Math.round((p.unitsProducedToday / targetQ) * 100)
+      : p.lastDayQuotaPct;
     addLog(`📋 Więzień ${p.name} przeniesiony do: ${JOBS[newJob].name}.`, 'info');
     renderInspector();
-    if (state.activePanel === 'prisoners' || state.activePanel === 'jobs') {
+    if (state.activePanel === 'prisoners' || state.activePanel === 'jobs' || state.activePanel === 'nutrition') {
       renderActivePanel();
     }
   }
