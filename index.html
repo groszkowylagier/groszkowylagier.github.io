@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JERCEWO - Symulator Łagru</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+  <!-- 3D Viewport -->
+  <div id="canvas-container"></div>
+
+  <!-- Cinematic Cutscene Overlay (Rozstrzelanie / Biczowanie) -->
+  <div id="cutscene-overlay" class="hidden">
+    <div id="cutscene-flash"></div>
+    <div class="letterbox-bar top">
+      <div id="cutscene-title">🎬 WYROK TRZECIEGO ODDZIAŁU NKWD (JERCEWO)</div>
+      <button id="cutscene-skip-btn" onclick="skipCutscene()">Pomiń cutscenkę ⏭️</button>
+    </div>
+    <div class="letterbox-bar bottom">
+      <div id="cutscene-subtitle">Strażnik WOChR wykonuje karę przed Wachtą...</div>
+    </div>
+  </div>
+
+  <!-- Top Bar HUD -->
+  <header id="top-bar">
+    <div class="brand-title">
+      <div class="crown-badge" style="cursor:pointer;" onclick="openPanel('cards')" title="Poziom Gwiazdek Obozu (0–5 ★). Z każdą gwiazdką mapa gry i teren zony się powiększają! Kliknij, aby zarządzać.">
+        <span id="hud-camp-lvl" style="letter-spacing:1px; color:#f1c40f;">☆☆☆☆☆</span>
+        <small id="hud-camp-sub">0/5 ★ ZONA</small>
+      </div>
+      <div>
+        <h1>JERCEWO - Symulator Łagru</h1>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-pill" title="Budżet obozu w rublach">
+        <span class="label">Budżet (Ruble)</span>
+        <span class="val money" id="hud-money">650 ₽</span>
+      </div>
+      <div class="stat-pill" title="Zapas drewna opałowego i budowlanego">
+        <span class="label">Drewno</span>
+        <span class="val wood" id="hud-wood">90 szt.</span>
+      </div>
+      <div class="stat-pill" title="Liczba żywych więźniów / Pojemność prycz w barakach">
+        <span class="label">Więźniowie</span>
+        <span class="val pop" id="hud-pop">14 / 20</span>
+      </div>
+      <div class="stat-pill" title="Zatrudnieni strażnicy WOChR">
+        <span class="label">Strażnicy</span>
+        <span class="val guards" id="hud-guards">4</span>
+      </div>
+      <div class="stat-pill" title="Pacjenci w Szpitalu (więźniowie <10 HP idą do szpitala i leczą się przez 12h do 100 HP)">
+        <span class="label">➕ W Szpitalu</span>
+        <span class="val" style="color:#5dade2;" id="hud-hospital">0 os.</span>
+      </div>
+      <div class="stat-pill" title="Temperatura na zewnątrz (spadek ciepła na mrozie: 5% na godzinę)">
+        <span class="label">Temperatura</span>
+        <span class="val temp-cold" id="hud-temp">-18°C</span>
+      </div>
+      <div class="stat-pill" title="Zgony więźniów">
+        <span class="label">Zgony</span>
+        <span class="val" style="color:#e74c3c;" id="hud-deaths">0</span>
+      </div>
+    </div>
+
+    <div class="time-controls">
+      <div class="clock-display" id="hud-clock">Dzień 1 • 07:00</div>
+      <button class="speed-btn" data-speed="0" onclick="setGameSpeed(0)">⏸</button>
+      <button class="speed-btn active" data-speed="1" onclick="setGameSpeed(1)" title="1h w grze = 1 minuta w realu">1x</button>
+      <button class="speed-btn" data-speed="2.5" onclick="setGameSpeed(2.5)">2.5x</button>
+      <button class="speed-btn" data-speed="6" onclick="setGameSpeed(6)">6x</button>
+      <button class="speed-btn" style="background:#2c3e50; border-color:#5dade2;" onclick="openPanel('settings')" title="Ustawienia gry (Zapisz / Wczytaj w plikach Cookie)">⚙️ Ustawienia</button>
+    </div>
+  </header>
+
+  <!-- 24h Schedule Strip -->
+  <div id="schedule-strip">
+    <div class="current-regime-badge regime-WORK" id="current-regime-label">PORA: PRACA (ROBOTA)</div>
+    <div id="mini-schedule-bar" title="Kliknij, aby edytować Grafik Dnia"></div>
+    <button class="speed-btn" style="background:#8e44ad; border-color:#b06cd1;" onclick="openRollCallModal()">📢 Przemów na Apelu</button>
+    <div style="font-size:11px; color:#ccc; white-space:nowrap;" id="train-status-label">🚂 Rampa: Gotowa</div>
+  </div>
+
+  <!-- OGÓLNE WSKAŹNIKI OBOZU PRACY -->
+  <div id="indicators-strip">
+    <div class="ind-item" title="Średnie zdrowie wszystkich więźniów w obozie">
+      <span>❤️ Śr. Zdrowie: <b id="ind-hp-val">100%</b></span>
+      <div class="ind-bar"><div class="ind-fill" id="ind-hp-bar" style="width:100%; background:#2ecc71;"></div></div>
+    </div>
+    <div class="ind-item" title="Średnie ogrzanie więźniów (w barakach i stołówce szybko rośnie do 100%)">
+      <span>🔥 Ogrzanie: <b id="ind-warm-val">95%</b></span>
+      <div class="ind-bar"><div class="ind-fill" id="ind-warm-bar" style="width:95%; background:#3498db;"></div></div>
+    </div>
+    <div class="ind-item" title="Ogólny poziom posłuszeństwa i dyscypliny w obozie">
+      <span>⚖️ Dyscyplina: <b id="ind-obed-val">80%</b></span>
+      <div class="ind-bar"><div class="ind-fill" id="ind-obed-bar" style="width:80%; background:#f1c40f;"></div></div>
+    </div>
+    <div class="ind-item" title="Średnie wykonanie normy dziennej przez wszystkie brygady">
+      <span>📊 Norma Dnia: <b id="ind-quota-val">100%</b></span>
+      <div class="ind-bar"><div class="ind-fill" id="ind-quota-bar" style="width:100%; background:#9b59b6;"></div></div>
+    </div>
+    <div class="ind-item" title="Ryzyko buntu lub sabotażu (zależy od głodu, Urków i liczby strażników)">
+      <span>⚠️ Ryzyko Buntu: <b id="ind-riot-val">12%</b></span>
+      <div class="ind-bar"><div class="ind-fill" id="ind-riot-bar" style="width:12%; background:#e74c3c;"></div></div>
+    </div>
+  </div>
+
+  <!-- Build Mode Banner -->
+  <div id="build-mode-banner" class="hidden">
+    <span id="build-mode-text">TRYB BUDOWY: Kliknij LPM na śniegu, aby postawić budynek</span>
+    <button class="speed-btn" style="background:#c0392b;" onclick="cancelBuildMode()">Anuluj [ESC / PPM]</button>
+  </div>
+
+  <!-- Guard Crime Report Modal -->
+  <div id="crime-modal" class="modal-overlay hidden">
+    <div class="modal-header">
+      <h3>🚨 Raport Karny Strażnika WOChR</h3>
+      <button class="close-btn" onclick="closeCrimeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="crime-modal-body"></div>
+  </div>
+
+  <!-- Roll Call Speech Modal -->
+  <div id="speech-modal" class="modal-overlay hidden">
+    <div class="modal-header" style="background: linear-gradient(90deg, #5b2c6f 0%, #2e1538 100%);">
+      <h3>📢 Apel Obozowy – Przemówienie Naczelnika</h3>
+      <button class="close-btn" onclick="closeSpeechModal()">✕</button>
+    </div>
+    <div class="modal-body" id="speech-modal-body"></div>
+  </div>
+
+  <!-- Left Floating Management Panel -->
+  <section id="management-panel" class="hidden">
+    <div class="panel-header">
+      <h2 id="panel-title">Zarządzanie</h2>
+      <button class="close-btn" onclick="closePanel()">✕</button>
+    </div>
+    <div class="panel-body" id="panel-content"></div>
+  </section>
+
+  <!-- Right Inspector & Event Log -->
+  <aside id="right-sidebar">
+    <div class="sidebar-card" id="inspector-card">
+      <h3>
+        <span>Kartoteka / Budynek</span>
+        <span id="inspector-sub" style="font-size:10px; color:#999;">Kliknij postać lub budynek 3D</span>
+      </h3>
+      <div id="inspector-body" style="font-size:12px; color:#bbb; line-height:1.45;">
+        Kliknij dowolnego <b>więźnia</b> (aby wymierzyć mu karę lub sprawdzić kalorie) albo kliknij dowolny <b>budynek 3D</b>, aby ulepszyć jego Kartę (jak w Clash Royale)!
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>
+        <span>Dziennik i Raporty Strażników</span>
+        <span style="font-size:10px; color:#888;">Na żywo</span>
+      </h3>
+      <div id="event-log"></div>
+    </div>
+  </aside>
+
+  <!-- On-Screen Tablet Camera Controls -->
+  <div id="tablet-cam-controls">
+    <button class="cam-touch-btn" title="Przybliż kamerę" onclick="zoomCameraBy(-14)">➕</button>
+    <button class="cam-touch-btn" title="Oddal kamerę (widok całego obozu)" onclick="zoomCameraBy(14)">➖</button>
+    <button class="cam-touch-btn" title="Wyśrodkuj kamerę na obozie" onclick="resetCameraToCamp()">🎯</button>
+  </div>
+
+  <!-- Bottom Controls Hint -->
+  <div id="controls-hint">
+    <b>Tablet / PC:</b> Przesuwaj palcem (lub LPM/WASD) po mapie • Szczypanie / ➕➖ – zoom • Dotknij postać lub budynek, aby otworzyć kartę
+  </div>
+
+  <!-- Bottom Tabs -->
+  <nav id="bottom-dock">
+    <button class="dock-btn" data-tab="cards" onclick="openPanel('cards')">🃏 Karty Budynków (Ulepszaj!)</button>
+    <button class="dock-btn" data-tab="indicators" onclick="openPanel('indicators')">📈 Wskaźniki Obozu</button>
+    <button class="dock-btn" data-tab="schedule" onclick="openPanel('schedule')">🕒 Grafik i Apel</button>
+    <button class="dock-btn" data-tab="nutrition" onclick="openPanel('nutrition')">🍲 Posiłki (kcal) i Normy</button>
+    <button class="dock-btn" data-tab="jobs" onclick="openPanel('jobs')">🪓 Prace i Brygady</button>
+    <button class="dock-btn" data-tab="prisoners" onclick="openPanel('prisoners')">👥 Więźniowie i Frakcje</button>
+    <button class="dock-btn" data-tab="guards" onclick="openPanel('guards')">💂 Strażnicy i Raporty</button>
+    <button class="dock-btn" data-tab="transport" onclick="openPanel('transport')">🚂 Pociąg (Etapy)</button>
+    <button class="dock-btn" data-tab="build" onclick="openPanel('build')">🧱 Stawiaj Nowe Budynki</button>
+    <button class="dock-btn" data-tab="settings" onclick="openPanel('settings')">⚙️ Ustawienia (Zapis)</button>
+  </nav>
+
+  <script src="game.js"></script>
+</body>
+</html>

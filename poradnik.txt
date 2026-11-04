@@ -1,0 +1,389 @@
+================================================================================
+                        JERCEWO - SYMULATOR ŁAGRU
+            KOMPLETNY PORADNIK GRACZA I OPIS WSZYSTKICH SYSTEMÓW GRY
+        (Inspirowany powieścią „Inny Świat” Gustawa Herlinga-Gruzińskiego)
+================================================================================
+
+SPIS TREŚCI:
+1. Cel gry i rola gracza (Naczelnika Obozu w Jercewie)
+2. Sterowanie kamerą i interfejsem (PC oraz Tablet / Dotyk)
+3. Zegar obozowy i Grafik Dnia (24h)
+4. Więźniowie i Frakcje Obozowe (oraz postacie z „Innego Świata”)
+5. Transporty Kolejowe, Pociąg Uległych i Automatyczne Etapy 8 Urków co 3 dni
+6. Praca, Brygady Robocze i Indywidualne Talenty Więźniów
+7. Normy Wydobywcze (1–300 szt.) i System Trzech Kotłów (Żywienie)
+8. System Głodu (🍖), Wygłodzenia i Śmierci Głodowej (24h)
+9. System Energii Więźniów (⚡) i Wyczerpania
+10. System Mrozu, Ciepła (❄️), Piecyków i Ognisk
+11. Zdrowie (❤️ HP), Szpital Obozowy (12h) i Zasady Śmierci
+12. Przestępstwa, Strażnicy WOChR, Kary i Cutscenki 3D
+13. Apele Obozowe i Przemówienia Naczelnika z Trybuny (Cutscenka 3D)
+14. Budowa, Ulepszanie, Przesuwanie Budynków i Blokada Nakładania
+15. Gwiazdki Obozu (0–5 ★ za 10/30/50/100/300 ulepszeń) i Powiększanie Mapy
+16. Ustawienia Gry oraz Zapis / Wczytywanie w Plikach Cookie
+17. Praktyczne wskazówki – jak przetrwać i rozbudować obóz na 5 ★
+
+================================================================================
+1. CEL GRY I ROLA GRACZA
+================================================================================
+Wcielasz się w Naczelnika sowieckiego obozu pracy poprawczej (ITŁ) w Jercewie
+w obwodzie archangielskim. Twoim zadaniem jest:
+- Utrzymanie wydobycia drewna i urobku (rubli ₽) na poziomie wymaganym przez
+  Centralę Gułagu.
+- Zarządzanie życiem, sytością, ciepłem, energią i dyscypliną więźniów.
+- Rozbudowa i ulepszanie budynków obozowych, aby zdobyć maksymalny poziom
+  5 Gwiazdek Obozu (★★★★★) i wielokrotnie powiększyć teren Zony.
+- Niedopuszczenie do masowej śmierci głodowej, zamarznięcia brygad na mrozie
+  oraz buntu przysyłanych co 3 dni groźnych kryminalistów (Urków).
+
+================================================================================
+2. STEROWANIE KAMERĄ I INTERFEJSEM (PC ORAZ TABLET / DOTYK)
+================================================================================
+Kamera w grze jest ustawiona pod stałym, wygodnym kątem 45 stopni (widok
+izometryczno-taktyczny bez obracania, dzięki czemu orientacja na mapie jest
+zawsze czytelna):
+
+- PRZESUWANIE KAMERY (PAN):
+  * Na tablecie / ekranie dotykowym: przeciągaj 1 palcem po ekranie.
+  * Na PC: przytrzymaj Lewy Przycisk Myszy (LPM) lub Prawy Przycisk Myszy (PPM)
+    i przeciągnij, albo użyj klawiszy W, A, S, D / strzałek.
+  * Możesz też używać przycisków kierunkowych (▲ ▼ ◄ ►) oraz przycisku 🎯
+    w prawym dolnym rogu ekranu.
+- PRZYBLIŻANIE / ODDALANIE (ZOOM):
+  * Na tablecie: gest szczypania dwoma palcami (pinch-to-zoom) lub przyciski
+    ➕ / ➖ w prawym dolnym rogu.
+  * Na PC: kółko myszy (scroll) lub przyciski ➕ / ➖.
+- WYBÓR POSTACI LUB BUDYNKU:
+  * Dotknij / kliknij bezpośrednio na więźnia, strażnika lub budynek na mapie 3D.
+  * Po prawej stronie otworzy się Inspektor ze szczegółowymi statystykami,
+    przyciskami zmiany pracy, ulepszenia lub przesunięcia budynku.
+
+================================================================================
+3. ZEGAR OBOZOWY I GRAFIK DNIA (24H)
+================================================================================
+- Skala czasu: 1 godzina w grze = 1 minuta czasu rzeczywistego (60 sekund przy
+  prędkości 1x).
+- Na górnym pasku możesz regulować tempo czasu:
+  * ⏸ (Pauza) – zatrzymuje grę (idealne na spokojne planowanie i budowę),
+  * 1x – normalne tempo (1h = 1 min),
+  * 2x – dwukrotne przyspieszenie,
+  * 4x – czterokrotne przyspieszenie.
+- W zakładce „📅 Grafik” (oraz na pasku 24-godzinnym u dołu ekranu) możesz
+  ustawić dla każdej godziny doby jeden z 5 trybów:
+  1) 🔨 PRACA (WORK) – więźniowie udają się do swoich miejsc pracy (Tajga,
+     Rampa Kolejowa, Kamieniołom, Kuchnia), wydobywają surowce i wyrabiają normę.
+  2) 🥣 POSIŁEK (MEAL) – więźniowie idą do Stołówki i odbierają racje żywnościowe
+     zależne od wyrobionego Kotła (I, II lub III).
+  3) 📢 APEL (ROLLCALL) – więźniowie zbierają się w szeregach przed czerwoną
+     trybuną na Placu Apelowym (+posłuszeństwo).
+  4) 🏠 CZAS WOLNY (FREE) – więźniowie wracają do ciepłych baraków, odpoczywają,
+     rozmawiają, ogrzewają się przy piecykach i regenerują energię.
+  5) 💤 SEN (SLEEP) – więźniowie kładą się na swoich drewnianych pryczach
+     w barakach (animacja leżenia na pryczy i chrapania „Zzz...”), szybko
+     regenerują energię i ciepło oraz zużywają najmniej kalorii.
+
+================================================================================
+4. WIĘŹNIOWIE I FRAKCJE OBOZOWE (ORAZ POSTACIE Z „INNEGO ŚWIATA”)
+================================================================================
+Każdy więzień należy do jednej z 4 frakcji o odmiennych cechach:
+
+1) 📘 Więzień Polityczny – Art. 58 (POLITICAL):
+   - Sumienny robotnik (mnożnik pracy 1.15x), bardzo rzadko wszczyna bójki,
+     nieco słabsza odporność na mróz (0.9x).
+2) 🔪 Urka – „Błatny” (URKA):
+   - Groźny kryminalista recydywista. Odporny na mróz (1.1x), bardzo agresywny.
+   - UWAGA: Urka pracuje WYŁĄCZNIE wtedy, gdy w promieniu 16 metrów od niego
+     znajduje się strażnik WOChR lub Wyszka Strażnicza! Bez nadzoru odmawia pracy
+     i terroryzuje więźniów politycznych oraz „Suki”.
+3) 🐾 „Suka” – Kolaborant (SUKA):
+   - Dawny kryminalista współpracujący z administracją obozową. Dobrze pracuje
+     (1.1x), ale toczy śmiertelną wojnę z Urkami (częste bójki przy spotkaniu).
+4) 🔨 Bytowik – Pospolity (BYTOVIK):
+   - Zwykły skazaniec (za kradzież, spekulację itp.). Zrównoważone statystyki
+     pracy (1.0x) i odporności na mróz (1.0x).
+
+UNIKALNI BOHATEROWIE Z KSIĄŻKI „INNY ŚWIAT”:
+- Postacie literackie (m.in. Gustaw Herling-Gruziński, Kostylew, Pamfiłow,
+  Gorcew, Dimka, Kowal, Marusia, Natalia Lwowna, Profesor Borys Lazarowicz,
+  Rustam Karinen, Sadowski, Generał) pojawiają się w obozie MAKSYMALNIE PO 1 RAZIE
+  na całą rozgrywkę. Wszyscy pozostali nowi więźniowie otrzymują losowe imiona
+  i nazwiska bez duplikatów.
+
+================================================================================
+5. TRANSPORTY KOLEJOWE, POCIĄG ULEGŁYCH I AUTOMATYCZNE ETAPY 8 URKÓW CO 3 DNI
+================================================================================
+W zakładce „🚂 Transport” możesz sprowadzać nowe etapy więźniów (pociąg
+przyjeżdża po torach na rampę i wyładowuje skazańców z wagonu „Tiepłuszka”):
+
+- 🚂 AUTOMATYCZNY TRANSPORT 8 URKÓW CO 3 DNI (PRZYMUSOWY):
+  * Raz na 3 dni (o północy w Dzień 3, Dzień 6, Dzień 9, Dzień 12 itd.) Centrala
+    Gułagu przysyła SAMOCZYNNIE pociąg etapowy z 8 Urkami („Błatnymi”) oraz
+    dotacją +180 ₽.
+  * Gra automatycznie dostawia prycze w barakach, jeśli brakuje miejsc, aby
+    wszyscy 8 Urkowie weszli do obozu. Musisz zawczasu dbać o liczbę strażników
+    WOChR i budowę Wyszek Strażniczych, by utrzymać ich w ryzach!
+
+- 👕 POCIĄG ULEGŁYCH (Koszt: 0 ₽):
+  * Specjalny darmowy transport, z którego wychodzi 3 unikalnych NPC:
+    1. Antoni Zadrożny (różowa koszula)
+    2. Matvii Mozheiko (fioletowa koszula)
+    3. Yaraslau Belski (niebieska koszula)
+  * Zasady specjalne tej trójki:
+    - Strażnicy zgłaszają każdego z nich o popełnienie przestępstwa DOSŁOWNIE
+      CO 10 SEKUND (nawet gdy spokojnie pracują lub śpią), aż do ich śmierci!
+    - Ci trzej więźniowie NIGDY nie trafiają do szpitala (nawet gdy mają <10 HP).
+
+- 🚃 Etap Mieszany (+4 więźniów, koszt: 90 ₽) – losowa mieszanka frakcji.
+- 📘 Spec-Etap Politycznych z Art. 58 (+4 więźniów, koszt: 150 ₽) – spokojni
+  i wydajni pracownicy.
+- 🔪 Karny Transport Urków (+4 więźniów, dotacja: +130 ₽) – szybki zastrzyk
+  gotówki kosztem sprowadzenia 4 niebezpiecznych kryminalistów.
+
+================================================================================
+6. PRACA, BRYGADY ROBOCZE I INDYWIDUALNE TALENTY WIĘŹNIÓW
+================================================================================
+Każdemu więźniowi możesz przypisać jedną z 4 brygad (w zakładce „👥 Więźniowie”
+lub w Inspektorze po kliknięciu postaci):
+
+1) 🌲 Wyrąb lasu – „Lesopował” (FOREST):
+   - Więźniowie ścinają drzewa w Dalekiej Tajdze i odnoszą kłody do Tartaku
+     (lub Polowej Birży Leśnej).
+   - Każdy zrzut daje DREWNO na opał i rozbudowę oraz ruble (₽).
+2) 🚂 Rozładunek na rampie – „Birża Kolejowa” (TRAIN_DOCK):
+   - Więźniowie rozładowują skrzynie z wagonów towarowych i odnoszą je do
+     Magazynu przy Tartaku.
+   - Przynosi najwyższy dochód w rublach (₽) oraz częściowy bonus drewna.
+3) ⛏️ Kamieniołom i glinianka (QUARRY):
+   - Ciężka praca kilofem przy kruszeniu skał we wschodnim wyrobisku. Daje
+     solidny dochód w rublach (₽).
+4) 🥣 Obsługa kuchni i baraków (KITCHEN):
+   - Lekka praca wewnątrz ogrzewanej Zony (w Stołówce). Więzień nie marznie na
+     zewnątrz i zapewnia premię do gospodarki obozowej.
+
+INDYWIDUALNY TALENT PRACY (p.workTalent):
+- Nie wszyscy więźniowie pracują tak samo! Przy narodzinach każdy skazaniec
+  otrzymuje losowy współczynnik wydajności od 0.55x do 1.55x:
+  * 🌟 Przodownik Pracy (130%–155% bazowego tempa) – błyskawicznie wyrabia
+    Trzeci Kocioł (125%+ normy).
+  * 🔨 Solidny Robotnik (90%–129% tempa) – stabilnie wyrabia Drugi Kocioł (100%).
+  * 🐢 Powolny Robotnik (72%–89% tempa) – wymaga dobrze zbalansowanej normy.
+  * 🥀 Słaby / Dochodiaga (55%–71% tempa) – pracuje wolno i łatwo spada na
+    Pierwszy Kocioł (<75% normy).
+
+================================================================================
+7. NORMY WYDOBYWCZE (1–300 SZT.) I SYSTEM TRZECH KOTŁÓW (ŻYWIENIE)
+================================================================================
+W zakładce „🥣 Kotły i Normy” zarządzasz sercem ekonomii łagru – sowieckim
+systemem „Trzech Kotłów” opisanym przez Herlinga-Gruzińskiego:
+
+JAK DZIAŁAJĄ NORMY DZIENNE (SUWAKI 1–300 SZT./DZIEŃ):
+- Dla każdej brygady (Wyrąb Lasu, Rampa Kolejowa, Kamieniołom, Kuchnia) możesz
+  ustawić dzienną normę od 1 do 300 jednostek.
+- W ramce każdej brygady widzisz na żywo DOKŁADNE STATYSTYKI SWOICH WIĘŹNIÓW:
+  * Średnio wyrabia więzień (np. ~18 szt./dzień),
+  * Najlepszy więzień (np. ~25 szt./dzień),
+  * Najgorszy więzień (np. ~11 szt./dzień).
+- Wpływ normy na grę:
+  * Niższa norma = więźniowie łatwiej osiągają 100% i 125% normy (Kocioł II i III)
+    oraz dają premie rublowe o północy.
+  * Wyższa norma = wyższy mnożnik surowców i rubli z każdego pojedynczego zrzutu
+    (do +65%), ale słabsi więźniowie nie wyrobią normy i spadną na Kocioł I!
+
+TRZY KOTŁY ŻYWIENIOWE (WYDAWANE PODCZAS GODZIN POSIŁKU „MEAL”):
+- 🥣 Kocioł I – Podstawowy (<75% normy):
+  * Dla więźniów niewyrabiających normy lub ukaranych obcięciem racji.
+  * Domyślnie daje 400g chleba i cienką lurę (+26% sytości na posiłek).
+- 🍲 Kocioł II – Normalny (75%–124% normy):
+  * Dla więźniów wyrabiających plan.
+  * Domyślnie daje 700g chleba i gęstą kaszę (+42% sytości i +4 HP).
+- 🥩 Kocioł III – Stachanowski (125%+ normy):
+  * Dla przodowników pracy przekraczających 125% normy.
+  * Domyślnie daje 1000g chleba, rybę i łój (+62% sytości i +10 HP).
+
+Możesz ręcznie zmieniać gramaturę chleba i jakość zupy każdego kotła – lepsze
+jedzenie kosztuje więcej rubli za posiłek, ale chroni obóz przed głodem!
+
+================================================================================
+8. SYSTEM GŁODU (🍖), WYGŁODZENIA I ŚMIERCI GŁODOWEJ (24H)
+================================================================================
+- Więźniowie spalają kalorie (Sytość) przez całą dobę:
+  * Podczas PRACY: -2.2% sytości na godzinę,
+  * Podczas CZASU WOLNEGO / APELU: -0.9% na godzinę,
+  * Podczas SNU na pryczy: tylko -0.45% na godzinę.
+- CO SIĘ DZIEJE, GDY SYTOŚĆ SPADNIE PONIŻEJ 30% (<30%):
+  1) Więzień staje się WYGŁODZONY – w dymku nad jego głową pojawia się ikonka
+     mięska (🍖).
+  2) Wygłodzony więzień porusza się i pracuje 2 RAZY WOLNIEJ (0.5x prędkości)!
+  3) Uruchamia się 24-godzinny zegar śmierci głodowej (widoczny na liście
+     więźniów i w Inspektorze).
+  4) Jeśli więzień pozostanie wygłodzony (<30% sytości) nieprzerwanie przez
+     24 godziny czasu gry – UMIERA Z GŁODU!
+  5) Jeśli zje posiłek w Stołówce i jego sytość wzrośnie powyżej 30%, licznik
+     śmierci głodowej cofa się.
+
+================================================================================
+9. SYSTEM ENERGII WIĘŹNIÓW (⚡) I WYCZERPANIA
+================================================================================
+Każdy więzień posiada pasek Energii (⚡):
+- SPADEK ENERGII: Podczas godzin PRACY energia spada dokładnie o 5% na godzinę.
+- ODNAWIANIE ENERGII: Poza godzinami pracy (podczas Snu, Czasu Wolnego, Posiłku
+  lub Apelu) energia odnawia się o 20% na godzinę (aż do 100%).
+- SKUTEK WYCZERPANIA (ENERGIA <= 0%):
+  * Gdy zmuszasz więźniów do zbyt długiej pracy bez odpoczynku i ich energia
+    spadnie do 0% lub poniżej (może spaść aż do -50%), więzień staje się
+    SKRAJNIE WYCZERPANY (ikonka 🪫).
+  * Wyczerpany więzień pracuje 4 RAZY WOLNIEJ (25% normalnej wydajności)!
+  * Wystarczy jednak kilka godzin Snu lub Czasu Wolnego w grafiku (po +20%/h),
+    aby więźniowie w pełni odzyskali siły.
+
+================================================================================
+10. SYSTEM MROZU, CIEPŁA (❄️), PIECYKÓW I OGNISK
+================================================================================
+W Jercewie panuje surowy syberyjski mróz (od -14°C w południe do -30°C w nocy):
+- Przebywając na zewnątrz, więzień traci podstawowo 5% Ciepła na godzinę
+  (modyfikowane przez odporność frakcji na mróz).
+- Jak ogrzewać więźniów:
+  1) Wewnątrz budynków (Baraki nr 1 i 2, dodatkowe Baraki, Stołówka, Szpital)
+     działają żeliwne piecyki („burżujki”), które szybko ogrzewają więźniów.
+  2) Piecyki spalają 2 szt. drewna co godzinę. Jeśli w obozie zabraknie drewna
+     (0 szt.), piecyki gasną i ogrzewają znacznie słabiej!
+  3) Na trasach przemarszu (np. między bramą a Tajgą lub Kamieniołomem) możesz
+     budować Ogniska Polowe (🔥), które ogrzewają każdego więźnia przechodzącego
+     w ich promieniu.
+- HIPOTERMIA: Gdy Ciepło więźnia spadnie do 0%, zaczyna on zamarzać (🥶) i traci
+  zdrowie (HP) z każdą sekundą!
+
+================================================================================
+11. ZDROWIE (❤️ HP), SZPITAL OBOZOWY (12H) I ZASADY ŚMIERCI
+================================================================================
+- Każdy więzień ma 100 HP. Zdrowie spada od hipotermii (0% ciepła), bójek
+  frakcyjnych oraz kar fizycznych (chłosta, słup karny na mrozie).
+- KIEDY WIĘZIEŃ TRAFIA DO SZPITALA:
+  * Gdy zdrowie więźnia spadnie PONIŻEJ 10 HP (<10 HP), np. zostanie mu 2–9 HP,
+    automatycznie przerywa pracę i udaje się do Szpitala Obozowego (🏥).
+  * W Szpitalu leży na pryczy przez 12 godzin (ulepszanie Szpitala skraca ten
+    czas nawet do 4h) i po zakończeniu kuracji wychodzi w pełni zdrowy (100 HP).
+- WAŻNE WYJĄTKI OD SZPITALA:
+  1) PODCZAS WYKONYWANIA KARY więzień NIE trafia do szpitala! Jeśli ma mało
+     zdrowia i wymierzysz mu chłostę lub słup na mrozie, i jego HP spadnie
+     do 0 w trakcie kary – więzień GINIE NA MIEJSCU. Dopiero gdy przeżyje karę
+     i po jej zakończeniu zostanie mu np. 2 HP (<10 HP), zostaje przeniesiony
+     do Szpitala.
+  2) Trzej więźniowie z Pociągu Uległych (Antoni Zadrożny, Matvii Mozheiko,
+     Yaraslau Belski) NIGDY nie trafiają do szpitala i walczą o przetrwanie aż
+     do śmierci.
+
+================================================================================
+12. PRZESTĘPSTWA, STRAŻNICY WOCHR, KARY I CUTSCENKI 3D
+================================================================================
+W zakładce „💂 Strażnicy” możesz zatrudniać nowych wartowników WOChR i przypisywać
+im strefy patrolowe (Plac Apelowy, Daleka Tajga, Rampa Kolejowa, Kamieniołom,
+Baraki).
+- Gdy więzień dopuści się przewinienia (odmowa pracy, bójka, kradzież chleba,
+  sabotaż, próba samookaleczenia), strażnik wysyła RAPORT KARNY.
+- Jako Naczelnik masz do wyboru 6 kar:
+  1) 🗣️ Nagana i powrót do pracy (+15% posłuszeństwa).
+  2) 🍞 Karny Kocioł Nr 1 – obcięcie racji do 300g chleba na 24h (+25% posł.).
+  3) 🔒 Zamknięcie w Karcerze (Izolatorze) – więzień idzie do celi karceru
+     (+40% posłuszeństwa).
+  4) 🏏 Chłosta pałką pod słupem (CUTSCENKA 3D!) – więźniowie ustawiają się na
+     Placu Apelowym, a strażnik wymierza 4 uderzenia (-22 HP, +48% posł.).
+  5) 🥶 Słup karny na mrozie (CUTSCENKA 3D!) – skazaniec stoi przywiązany do
+     słupa na lodowatym wietrze i drży z zimna (-36% ciepła, -18 HP, +52% posł.).
+  6) 🔫 Rozstrzelanie przed szeregiem (CUTSCENKA 3D!) – publiczna egzekucja na
+     Placu Apelowym. Skazaniec ginie, a posłuszeństwo wszystkich pozostałych
+     więźniów w obozie natychmiast wzrasta do 100%!
+
+================================================================================
+13. APELE OBOZOWE I PRZEMÓWIENIA NACZELNIKA Z TRYBUNY (CUTSCENKA 3D)
+================================================================================
+Klikając przycisk „📢 Zwołaj Apel” na górnym pasku, możesz w każdej chwili
+zwołać obóz na Plac Apelowy i wygłosić przemówienie z czerwonej trybuny
+(z pełną cutscenką 3D, w której stoisz z megafonem przed szeregami więźniów):
+
+1) 🎖️ Obietnica przedterminowego zwolnienia i III Kotła (Darmowe):
+   - Przez 6 godzin: +20% do wydajności pracy i -25% przestępstw.
+2) 🔫 Groźba rozstrzelania i sądu obozowego (Darmowe):
+   - Przez 6 godzin: +15% do pracy, -65% przestępstw, +30% posłuszeństwa.
+3) 🍞 Wydanie dodatkowej machorki i gorącej kaszy (Koszt: 45 ₽):
+   - Przez 8 godzin: +30% do pracy, -50% przestępstw oraz natychmiastowe +25%
+     sytości i +15% ciepła dla wszystkich więźniów!
+4) 🔍 Generalna rewizja osobista na placu apelowym (Darmowe):
+   - Konfiskata noży i kontrabandy (+45 ₽ do budżetu) oraz -80% przestępstw
+     przez kolejne 8 godzin.
+
+================================================================================
+14. BUDOWA, ULEPSZANIE, PRZESUWANIE BUDYNKÓW I BLOKADA NAKŁADANIA
+================================================================================
+- STAWIANIE NOWYCH BUDYNKÓW („🧱 Buduj”):
+  Możesz budować na mapie 3D dodatkowe obiekty:
+  * 🏠 Dodatkowy Barak Więzienny (+8 prycz i piecyk grzewczy),
+  * 🗼 Dodatkowa Wyszka Strażnicza (nadzoruje Urków w promieniu 28m+),
+  * 🔥 Ognisko Polowe dla Brygad (ogrzewa więźniów w promieniu 9.5m+),
+  * 🪵 Polowa Birża Leśna (punkt zrzutu drewna blisko Tajgi – skraca drogę!),
+  * 🔒 Dodatkowy Karcer / Izolator (-15% przestępstw w całym obozie).
+- BLOKADA STAWIANIA BUDYNKÓW JEDEN NA DRUGIM:
+  * Gra sprawdza kolizje z innymi budynkami, ogrodzeniem z drutu kolczastego
+    oraz torami kolejowymi.
+  * Zielony podgląd (duch budynku) oznacza wolne miejsce; czerwony podgląd
+    oznacza kolizję i blokuje postawienie budynku na innym obiekcie.
+- ULEPSZANIE I PRZESUWANIE WSZYSTKICH BUDYNKÓW:
+  * Każdy budynek w grze (zarówno startowy, jak i postawiony przez Ciebie!)
+    możesz ulepszać aż do Poziomu 100 oraz dowolnie PRZESUWAĆ (✋ Przesuń)
+    w inne wolne miejsce na mapie!
+  * Możesz to zrobić klikając budynek bezpośrednio na mapie 3D, w zakładce
+    „🃏 Karty” lub w zakładce „🧱 Buduj”.
+
+================================================================================
+15. GWIAZDKI OBOZU (0–5 ★ ZA 10/30/50/100/300 ULEPSZEŃ) I POWIĘKSZANIE MAPY
+================================================================================
+Twój obóz posiada ogólny poziom prestiżu wyrażony w Gwiazdkach (od 0 ★ do 5 ★),
+widoczny na górnym pasku HUD.
+- Gwiazdki zdobywasz za łączną liczbę ULEPSZEŃ BUDYNKÓW (zarówno głównych, jak
+  i postawionych przez Ciebie):
+  * ★☆☆☆☆ (1 Gwiazdka):  10 ulepszeń budynków -> Teren Zony: 100m × 70m
+  * ★★☆☆☆ (2 Gwiazdki):  30 ulepszeń budynków -> Teren Zony: 136m × 96m
+  * ★★★☆☆ (3 Gwiazdki):  50 ulepszeń budynków -> Teren Zony: 184m × 130m
+  * ★★★★☆ (4 Gwiazdki): 100 ulepszeń budynków -> Teren Zony: 240m × 170m
+  * ★★★★★ (5 Gwiazdek): 300 ulepszeń budynków -> Teren Zony: 308m × 218m!
+- Z każdą zdobytą Gwiazdką:
+  * Ogrodzenie z drutu kolczastego i narożne Wyszki Strażnicze rozsuwają się,
+    dając Ci ogromny nowy teren pod budowę kolejnych baraków, tartaków i wież!
+  * Otrzymujesz premię rubli (₽), drewna (🪵) oraz +6 dodatkowych miejsc
+    w barakach za każdą gwiazdkę.
+
+================================================================================
+16. USTAWIENIA GRY ORAZ ZAPIS / WCZYTYWANIE W PLIKACH COOKIE
+================================================================================
+W zakładce „⚙️ Ustawienia” (dostępnej na górnym pasku oraz w dolnym menu):
+- 💾 ZAPISZ GRĘ TERAZ (W PLIKACH COOKIE):
+  Zapisuje kompletny stan Twojego obozu (budynki, ich pozycje i poziomy,
+  gwiazdki, wszystkich więźniów, strażników, normy, kotły i grafik) w plikach
+  Cookie przeglądarki (ważność: 365 dni).
+- 📂 WCZYTAJ GRĘ (Z PLIKÓW COOKIE):
+  Natychmiast odtwarza cały zapisany obóz bez konieczności zaczynania od nowa.
+- 🔄 AUTO-ZAPIS CO PÓŁNOC (00:00):
+  Domyślnie włączony – gra automatycznie zapisuje Twój postęp w plikach Cookie
+  na koniec każdego dnia o godzinie 00:00.
+- ❄️ OPADY ŚNIEGU 3D / 🎯 WYŚRODKOWANIE KAMERY:
+  Dodatkowe opcje pozwalające dostosować widoczność i szybko wrócić kamerą
+  nad Plac Apelowy.
+
+================================================================================
+17. PRAKTYCZNE WSKAZÓWKI – JAK PRZETRWAĆ I ROZBUDOWAĆ OBÓZ NA 5 ★
+================================================================================
+1. Zadbaj o drewno przed nocą: Upewnij się, że przynajmniej 3–4 więźniów pracuje
+   przy Wyrębie Lasu (🌲), aby piecyki w barakach nigdy nie zgasły.
+2. Postaw Ognisko Polowe (🔥) oraz Polową Birżę Leśną (🪵) przy północnej bramie
+   prowadzącej do Tajgi – drwale będą mieli o połowę krótszą drogę z kłodami
+   i nie zmarzną podczas pracy!
+3. Obserwuj zakładkę „🥣 Kotły i Normy”: Ustaw normy tak, aby średni urobek
+   więźnia pozwalał większości załogi wyrabiać 100% (Kocioł II). Dzięki temu
+   unikniesz plagi głodu (🍖).
+4. Zadbaj o grafik dnia („📅 Grafik”): Po 10–12 godzinach pracy koniecznie
+   zaplanuj Posiłek (🥣) oraz Czas Wolny (🏠) i Sen (💤), aby więźniowie
+   odnowili Energię (+20%/h) i nie spadli poniżej 0% energii (praca 4x wolniej).
+5. Przygotuj się na Dzień 3, 6, 9...: Co 3 dni przyjeżdża automatycznie pociąg
+   z 8 Urkami. Zatrudniaj strażników WOChR i stawiaj Wyszki Strażnicze (🗼)
+   w miejscach pracy, aby Urkowie musieli pracować pod lufami karabinów!
+================================================================================
